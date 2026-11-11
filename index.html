@@ -28,5 +28,16 @@
   <li>会用 GitHub 部署网站</li>
   <li>下一步：学 JavaScript</li>
 </ul>
+html
+
+
+<button id="btn">点我改文字</button>
+<p id="msg">这里是原来的文字</p>
+
+<script>
+  document.getElementById("btn").onclick = function () {
+    document.getElementById("msg").textContent = "你点了我！这是 JavaScript 干的";
+  };
+</script>
 </body>
 </html>
