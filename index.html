@@ -7,8 +7,13 @@
     body { font-family: system-ui, "Microsoft YaHei"; background: #f2f3f5; margin: 0; padding: 40px 16px; }
     .card { max-width: 640px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 8px 24px rgba(0,0,0,.08); line-height: 1.8; color: #222; }
     h1 { color: #c00000; margin-top: 0; }
+    h2 { font-size: 18px; margin: 28px 0 8px; }
     img { max-width: 100%; height: auto; border-radius: 10px; display: block; margin: 20px 0; }
-    button { padding: 8px 16px; font-size: 15px; cursor: pointer; border-radius: 24px; border: none; background: #2563eb; color: #fff; }
+    ul { padding-left: 22px; }
+    button { padding: 8px 16px; font-size: 15px; cursor: pointer; border-radius: 24px; border: none; background: #2563eb; color: #fff; margin: 6px 0; }
+    button:hover { opacity: .9; }
+    #gh p { margin: 4px 0; }
+    .muted { color: #888; font-size: 13px; }
   </style>
 </head>
 <body>
@@ -16,19 +21,44 @@
     <h1>你好，我是 maggie</h1>
     <p>我正在学习 AI 产品，这是我自己做的第一个网页。</p>
     <p>我的目标：2 个月内拿到 AI 产品经理的 offer。</p>
+
     <img src="photo.jpg" alt="我的照片">
+
     <ul>
       <li>会写 HTML 和 CSS</li>
       <li>会用 GitHub 部署网站</li>
       <li>下一步：学 JavaScript</li>
     </ul>
+
     <button id="btn">点我改文字</button>
     <p id="msg">这里是原来的文字</p>
-    <script>
-      document.getElementById("btn").onclick = function () {
-        document.getElementById("msg").textContent = "你点了我！这是 JavaScript 干的";
-      };
-    </script>
+
+    <h2>我的 GitHub</h2>
+    <p class="muted">点下面的按钮，从 GitHub 接口取我的账号信息</p>
+    <button id="load">加载我的 GitHub 信息</button>
+    <div id="gh"></div>
   </div>
+
+  <script>
+    document.getElementById("btn").onclick = function () {
+      document.getElementById("msg").textContent = "你点了我！这是 JavaScript 干的";
+    };
+
+    document.getElementById("load").onclick = function () {
+      var box = document.getElementById("gh");
+      box.textContent = "加载中…";
+      fetch("https://api.github.com/users/maggie-ais")
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          box.innerHTML =
+            "<p>用户名：" + data.login + "</p>" +
+            "<p>公开仓库：" + data.public_repos + " 个</p>" +
+            "<p>注册时间：" + data.created_at.slice(0, 10) + "</p>";
+        })
+        .catch(function () {
+          box.textContent = "加载失败：检查网络，或 GitHub 接口被墙";
+        });
+    };
+  </script>
 </body>
 </html>
