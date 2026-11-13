@@ -37,6 +37,10 @@
     <p class="muted">点下面的按钮，从 GitHub 接口取我的账号信息</p>
     <button id="load">加载我的 GitHub 信息</button>
     <div id="gh"></div>
+    <h2>留言板</h2>
+    <input id="msgInput" placeholder="写点什么…" style="padding:8px;width:70%;border:1px solid #ccc;border-radius:8px">
+    <button id="saveMsg">保存</button>
+    <ul id="msgList"></ul>
   </div>
 
   <script>
@@ -59,6 +63,30 @@
           box.textContent = "加载失败：检查网络，或 GitHub 接口被墙";
         });
     };
+  </script>
+
+  <script>
+    var KEY = "maggie_messages";
+  
+    function render() {
+      var list = JSON.parse(localStorage.getItem(KEY) || "[]");
+      document.getElementById("msgList").innerHTML = list.map(function (m) {
+        return "<li>" + m + "</li>";
+      }).join("");
+    }
+  
+    document.getElementById("saveMsg").onclick = function () {
+      var input = document.getElementById("msgInput");
+      var text = input.value.trim();
+      if (!text) return;
+      var list = JSON.parse(localStorage.getItem(KEY) || "[]");
+      list.push(text);
+      localStorage.setItem(KEY, JSON.stringify(list));
+      input.value = "";
+      render();
+    };
+  
+    render();
   </script>
 </body>
 </html>
